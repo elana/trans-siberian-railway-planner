@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trans-Siberian Railway — Timetable &amp; Destinations</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;margin:0;padding:12px 14px 40px;background:#fff;color:#1a1a1a;max-width:1200px;margin-left:auto;margin-right:auto}
+:root{
+  font-size:20px; /* Change this to rescale all text: 16px=original, 20px=+25%, 24px=+50% */
+  --color-background-primary:#fff;
+  --color-background-secondary:#f5f5f5;
+  --color-background-info:#EBF2FF;
+  --color-background-success:#E6F9F0;
+  --color-text-primary:#1a1a1a;
+  --color-text-secondary:#6b7280;
+  --color-text-tertiary:#9ca3af;
+  --color-text-info:#1D4ED8;
+  --color-border-secondary:#d1d5db;
+  --color-border-tertiary:#e5e7eb;
+  --color-border-info:#93C5FD;
+  --border-radius-md:6px;
+  --border-radius-lg:10px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --color-background-primary:#1c1c1e;
+    --color-background-secondary:#2c2c2e;
+    --color-background-info:#172554;
+    --color-background-success:#052e16;
+    --color-text-primary:#f5f5f5;
+    --color-text-secondary:#a1a1aa;
+    --color-text-tertiary:#71717a;
+    --color-text-info:#93C5FD;
+    --color-border-secondary:#3f3f46;
+    --color-border-tertiary:#27272a;
+    --color-border-info:#1e3a5f;
+  }
+  body{background:#1c1c1e;color:#f5f5f5}
+}
+h1{font-size:1.125rem;font-weight:600;margin:0 0 2px;color:var(--color-text-primary)}
+.subtitle{font-size:0.75rem;color:var(--color-text-secondary);margin-bottom:14px}
+#hdr{position:sticky;top:0;background:var(--color-background-primary);z-index:20;padding:8px 0 6px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:4px}
+.frow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:7px}
+.frow:last-child{margin-bottom:0}
+.flbl{font-size:0.6875rem;color:var(--color-text-secondary);min-width:120px;flex-shrink:0}
+.fb{border:0.5px solid var(--color-border-secondary);background:transparent;border-radius:var(--border-radius-md);padding:6px 14px;font-size:0.75rem;cursor:pointer;color:var(--color-text-primary);font-weight:400}
+.fb:hover{background:var(--color-background-secondary)}
+.tab-bar{display:none;margin:8px 0 5px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);overflow:hidden}
+.tab-btn{flex:1;border:none;background:transparent;padding:11px;font-size:0.8125rem;cursor:pointer;color:var(--color-text-secondary);font-weight:500}
+.tab-btn.tab-act{background:var(--color-background-secondary);color:var(--color-text-primary)}
+@media(max-width:640px){.tab-bar{display:flex}.sec-hidden{display:none!important}}
+.sec-hdr{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 8px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.sec-title{font-size:0.8125rem;font-weight:600;color:var(--color-text-primary);margin:0}
+.sec-count{font-size:0.6875rem;color:var(--color-text-secondary)}
+#stbar{font-size:0.6875rem;color:var(--color-text-secondary);padding:4px 0 6px}
+#tbl-wrap{overflow-y:auto;overflow-x:auto;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th{font-size:0.625rem;font-weight:500;color:var(--color-text-secondary);text-align:left;padding:7px 5px;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap;position:sticky;top:0;background:var(--color-background-primary);z-index:2}
+td{font-size:0.75rem;padding:6px 5px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+tr.row{cursor:pointer}
+tr.row:hover td{background:var(--color-background-secondary)}
+tr.dep td{background:var(--color-background-info)!important}
+tr.arr td{background:var(--color-background-success)!important}
+tr.mid td{background:rgba(250,199,117,0.18)!important}
+tr.mid:hover td{background:rgba(250,199,117,0.32)!important}
+.ba{display:inline-block;font-size:0.5625rem;font-weight:500;padding:2px 6px;border-radius:3px;background:var(--color-background-info);color:var(--color-text-info)}
+.bb{display:inline-block;font-size:0.5625rem;font-weight:500;padding:2px 6px;border-radius:3px;background:#FAC775;color:#633806}
+.bab{display:inline-flex;gap:3px;flex-wrap:wrap}
+.t1b{display:inline-block;font-size:0.5625rem;padding:2px 5px;border-radius:2px;background:#CECBF6;color:#26215C;margin-left:5px;vertical-align:middle}
+.t2b{display:inline-block;font-size:0.5625rem;padding:2px 4px;border-radius:2px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary);margin-left:5px;vertical-align:middle}
+.sname{font-size:0.75rem;font-weight:500;color:var(--color-text-primary)}
+.scity{font-size:0.625rem;color:var(--color-text-secondary);margin-top:2px}
+.na{color:var(--color-text-tertiary);font-size:0.6875rem;font-style:italic}
+#panel{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem;margin:12px 0}
+.phdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.ptitle{font-size:0.8125rem;font-weight:500}
+.pclr{border:0.5px solid var(--color-border-secondary);background:transparent;border-radius:var(--border-radius-md);padding:5px 14px;font-size:0.75rem;cursor:pointer;color:var(--color-text-secondary)}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.pgrid{grid-template-columns:1fr}}
+.pcard{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1rem}
+.pcttl{font-size:0.6875rem;font-weight:500;margin-bottom:12px}
+.pr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:10px}
+.pk{font-size:0.6875rem;color:var(--color-text-secondary);flex-shrink:0}
+.pv{font-size:0.75rem;font-weight:500;text-align:right}
+.pmsk{font-size:0.625rem;font-weight:400;color:var(--color-text-secondary)}
+.pdur{font-size:1.125rem;font-weight:500;margin:5px 0 12px}
+.pna{color:var(--color-text-tertiary);font-style:italic;font-size:0.6875rem}
+.psep{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:10px 0}
+#cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:4px 0 20px}
+@media(max-width:1000px){#cards-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){#cards-grid{grid-template-columns:1fr}}
+.dest-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow 0.15s}
+.dest-card:hover{box-shadow:0 2px 18px rgba(0,0,0,0.1)}
+.card-img-wrap{position:relative;height:175px;background:linear-gradient(135deg,var(--color-background-secondary) 0%,var(--color-border-tertiary) 100%);overflow:hidden;flex-shrink:0}
+.card-img-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2rem;opacity:0.35}
+.card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s}
+.card-img.loaded{opacity:1}
+.card-tier-badge{position:absolute;top:10px;right:10px;font-size:0.5625rem;padding:3px 7px;border-radius:3px;font-weight:600}
+.ct1{background:#CECBF6;color:#26215C}
+.ct2{background:rgba(255,255,255,0.85);color:#4b5563;border:0.5px solid #d1d5db}
+.card-rbadge{position:absolute;top:10px;left:10px;display:flex;gap:4px}
+.card-body{padding:14px 16px 16px;display:flex;flex-direction:column}
+.card-name{font-size:0.875rem;font-weight:600;color:var(--color-text-primary);margin-bottom:5px}
+.card-station{font-size:0.625rem;color:var(--color-text-tertiary);margin-bottom:8px}
+.card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.card-tag{font-size:0.625rem;padding:3px 9px;border-radius:10px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+.card-why{font-size:0.75rem;color:var(--color-text-secondary);line-height:1.55;margin-bottom:0}
+.card-top5-section{border-top:0.5px solid var(--color-border-tertiary);padding-top:14px;margin-top:14px}
+.card-top5-hdr{font-size:0.75rem;font-weight:600;color:var(--color-text-primary);margin:0 0 10px}
+.card-top5{margin:0 0 12px;padding-left:24px}
+.card-top5 li{font-size:0.6875rem;color:var(--color-text-primary);margin-bottom:8px;line-height:1.5}
+.card-src{font-size:0.6875rem;color:var(--color-text-info);text-decoration:none}
+.card-src:hover{text-decoration:underline}
+.no-cards{text-align:center;padding:50px 20px;color:var(--color-text-secondary);font-size:0.8125rem;grid-column:1/-1}
+footer{margin-top:40px;padding-top:16px;border-top:0.5px solid var(--color-border-tertiary)}
+.footer-note{font-size:0.625rem;color:var(--color-text-tertiary);line-height:1.7}
+.footer-note a{color:var(--color-text-secondary);text-decoration:none}
+.footer-note a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<h1>Trans-Siberian Railway</h1>
+<p class="subtitle">002Э Rossiya (Moscow–Vladivostok, 9,300 km) &amp; 010H · Click a row to set departure, click again to set arrival · Times shown in local time</p>
+
+<div id="hdr">
+  <div class="frow">
+    <span class="flbl">Destinations:</span>
+    <button class="fb" id="ft0" onclick="setTier(0)">All stops</button>
+    <button class="fb" id="ft1" onclick="setTier(1)">Highest popularity tourist destinations</button>
+    <button class="fb" id="ft2" onclick="setTier(2)">All popular tourist destinations</button>
+  </div>
+  <div class="frow">
+    <span class="flbl">Route:</span>
+    <button class="fb" id="fr0" onclick="setRoute('all')">Both trains</button>
+    <button class="fb" id="fr1" onclick="setRoute('AB')">Shared stops only</button>
+    <button class="fb" id="fr2" onclick="setRoute('A')">002Э Rossiya</button>
+    <button class="fb" id="fr3" onclick="setRoute('B')">010H</button>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn tab-act" id="tab-tbl" onclick="switchTab('tbl')">🗓 Timetable</button>
+  <button class="tab-btn" id="tab-crd" onclick="switchTab('crd')">📍 Destinations</button>
+</div>
+
+<!-- SECTION 1: TIMETABLE -->
+<div id="sec-tbl">
+  <div class="sec-hdr">
+    <span class="sec-title">🗓 Timetable</span>
+    <span id="stbar" class="sec-count"></span>
+  </div>
+  <div id="tbl-wrap">
+    <table>
+      <colgroup>
+        <col style="width:33px">
+        <col style="width:58px">
+        <col style="width:232px">
+        <col style="width:55px">
+        <col style="width:128px">
+        <col style="width:128px">
+      </colgroup>
+      <thead><tr>
+        <th>#</th>
+        <th>Route</th>
+        <th>Station</th>
+        <th style="text-align:right">km</th>
+        <th><span class="ba">002Э</span> Rossiya · local arr.</th>
+        <th><span class="bb">010H</span> local arr.</th>
+      </tr></thead>
+      <tbody id="tbl"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- COMPARISON PANEL -->
+<div id="panel" style="display:none"></div>
+
+<!-- SECTION 2: DESTINATION CARDS -->
+<div id="sec-crd">
+  <div class="sec-hdr">
+    <span class="sec-title">📍 Destinations</span>
+    <span id="card-bar" class="sec-count"></span>
+  </div>
+  <div id="cards-grid"></div>
+</div>
+
+<footer>
+  <p class="footer-note">
+    Schedule data sourced from Tutu.travel on June 26, 2026 ·
+    002Э Rossiya: <a href="https://www.tutu.travel/poezda/view_d.php?np=77d5d351" target="_blank" rel="noopener">Tutu.travel</a> ·
+    010H: <a href="https://www.tutu.travel/poezda/view_d.php?np=307786" target="_blank" rel="noopener">Tutu.travel</a>
+  </p>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const DA=60,DB=1347;
+
+const names=["Moskva Yaroslavskaya","Aleksandrov-1","Vladimir","Rostov Velikiy","Kovrov-1","Yaroslavl Pass.","Nerekhta","Kostroma-Novaya","Sudislavl","Nizhny Novgorod","Galich","Semenov","Antropovo","Nikolo-Poloma","Nomzha","Neya","Brantovka","Manturovo","Sharya","Yakshanga","Ponazyrevo","Suprotivnyy","Gostovskaya","Shabalino","Svecha","Kotelnich-1","Kirov Pass","Zuevka","Glazov","Balezino","Vereshchagino","Perm-2","Kungur","Ekaterinburg Pass.","Tyumen","Yalutorovsk","Ishim","Maslyanskaya","Nazyvaevskaya","Omsk","Tatarskaya","Chany","Ozero-Karachinskoe","Barabinsk","Kargat","Ob","Novosibirsk-Glavnyy","Moshkovo","Bolotnaya","Yurga-1","Yashkino","Taiga","Anzherskaya","Yaya","Mariinsk","Tyazhin","Bogotol","Achinsk-1","Krasnoyarsk Pass","Uyar","Zaozernaya","Kansk-Eniseiskiy","Ilanskaya","Ingashskaya","Reshoty","Yurty","Taishet","Nizhneudinsk","Tulun","Kuitun","Zima","Zalari","Cheremkhovo","Usolye-Sibirskoe","Angarsk","Irkutsk Sortirovochnyy","Irkutsk Passazhirskiy","Slyudyanka-1","Baikalsk","Mysovaya","Timlyui","Selenga","Ulan-Ude Pass.","Zaigraevo","Novoilinsky","Gorkhon","Petrovskiy Zavod","Bada","Khilok","Khushenga","Kharagun","Mogzon","Chita-2","Karymskaya","Solntsevaya","Shilka-Pass.","Priiskovaya","Kuenga","Chernyshevsk-Zabaikalsk","Zhireken","Zilovo","Sbega","Ksenyevskaya","Mogocha","Amazar","Erofei Pavlovich","Urusha","Skovorodino","Taldan","Magdagachi","Tygda","Ushumun","Shimanovskaya","Ledyanaya","Svobodnyy","Seryshevo","Belogorsk","Pozdeevka","Ekaterinoslavka","Zavitaya","Bureya","Arkhara","Kundur-Khabarovskiy","Obluchye","Izvestkovaya","Birakan","Teploe Ozero","Izvestkovyy Zavod","Bira","Birobidzhan","In","Khabarovsk-1","Verino","Khor","Vyazemskaya","Bikin","Luchegorsk","Guberovo","Dalnerechensk-1","Ruzhino","Shmakovka","Spassk-Dalniy","Muchnaya","Sibirtsevo","Ozernaya Pad","Ussuriysk","Ugolnaya","Vladivostok"];
+
+const cities=["Moscow (Yaroslavsky stn)","Aleksandrov","Vladimir","Rostov Veliky (Yaroslavl Oblast)","Kovrov","Yaroslavl","Nerekhta","Kostroma","Sudislavl","Nizhny Novgorod","Galich","Semenov","Antropovo","","","Neya","","Manturovo","Sharya","","Ponazyrevo","","","Shabalino","Svecha","Kotelnich","Kirov (fmr. Vyatka)","Zuevka","Glazov","Balezino","Vereshchagino","Perm","Kungur","Yekaterinburg","Tyumen","Yalutorovsk","Ishim","Maslyanskoe","Nazyvaevsk","Omsk","Tatarsk","Chany","Lake Karachinskoye","Barabinsk","Kargat","Ob (near Novosibirsk)","Novosibirsk","Moshkovo","Bolotnaya","Yurga","Yashkino","Taiga","Anzhero-Sudzhensk","Yaya","Mariinsk","Tyazhin","Bogotol","Achinsk","Krasnoyarsk","Uyar","Zaozernaya","Kansk","Ilanskiy","Ingash","Reshoty","Yurty","Taishet (BAM junction)","Nizhneudinsk","Tulun","Kuitun","Zima","Zalari","Cheremkhovo","Usolye-Sibirskoye","Angarsk","Irkutsk (marshalling yard)","Irkutsk (main stn)","Slyudyanka","Baikalsk","Mysovaya","Timlyuy","Selenga","Ulan-Ude","Zaigraevo","Novoilinsky","Gorkhon","Petrovsk-Zabaykalsky","Bada","Khilok","Khushenga","Kharagun","Mogzon","Chita","Karymskaya","Solntsevaya","Shilka","Priiskovaya","Kuenga","Chernyshevsk-Zabaykalsky","Zhireken","Zilovo","Sbega","Ksenyevka","Mogocha","Amazar","Yerofey Pavlovich","Urusha","Skovorodino","Taldan","Magdagachi","Tygda","Ushumun","Shimanovsk","Ledyanaya","Svobodny","Seryshevo","Belogorsk","Pozdeevka","Ekaterinoslavka","Zavitinsk","Bureya","Arkhara","Kundur","Obluchye","Izvestkovaya","Birakan","Teploe Ozero","Izvestkovyy Zavod","Bira","Birobidzhan (capital, Jewish AO)","In","Khabarovsk","Verino","Khor","Vyazemsky","Bikin","Luchegorsk","Guberovo","Dalnerechensk","Ruzhino","Shmakovka","Spassk-Dalny","Muchnaya","Sibirtsevo","Ozernaya Pad","Ussuriysk","Vladivostok (suburb)","Vladivostok"];
+
+const kms=[0,112,210,224,274,280,330,376,429,461,502,530,548,572,583,601,629,654,702,725,748,758,770,796,819,871,958,1063,1166,1195,1318,1438,1539,1819,2145,2219,2434,2481,2568,2717,2886,2938,2950,3041,3166,3327,3344,3402,3470,3500,3546,3573,3604,3633,3721,3781,3854,3922,4106,4237,4272,4353,4385,4414,4461,4498,4524,4688,4804,4883,4943,4998,5063,5126,5154,5186,5194,5320,5361,5486,5552,5570,5650,5707,5746,5759,5793,5892,5943,5980,6002,6063,6207,6303,6416,6454,6499,6535,6596,6644,6679,6768,6809,6917,7015,7122,7220,7316,7411,7504,7569,7612,7734,7775,7818,7858,7876,7927,7955,7995,8040,8091,8165,8201,8245,8258,8271,8276,8317,8361,8433,8534,8601,8615,8662,8767,8814,8850,8886,8943,8987,9060,9102,9120,9152,9188,9267,9300];
+
+const tzs=[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,5,5,5,5,5,5,5,5,6,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10];
+
+const aArr=[0,92,-1,167,-1,216,267,330,436,-1,525,-1,603,627,642,659,684,714,755,790,809,820,835,863,887,949,1032,-1,1264,1297,1458,1606,1720,1983,2298,2398,2565,2611,2681,2775,2903,2938,2952,3027,3151,3270,3294,3409,3490,3521,-1,3595,3629,-1,3728,3813,3874,3936,4112,4278,4315,4384,4415,4462,4503,4547,4577,4730,4845,4910,4965,5039,5103,5162,5188,5226,5241,5440,5486,5597,5658,5677,5761,5862,-1,5917,5953,6063,6128,6195,6218,6272,6434,6603,6739,6782,6828,6870,6941,-1,7057,7150,7196,7317,7442,7566,7706,7815,7966,8068,8145,8189,8281,8323,8360,-1,8418,-1,8541,8579,8618,8665,8744,8789,8854,8873,8888,8898,8933,8968,9023,9110,9251,9264,9305,9411,9453,9485,9524,9579,9629,9686,9730,9753,9789,9823,9930,9977];
+
+const aStp=[0,2,0,1,0,3,5,45,2,0,40,0,1,2,1,1,1,2,14,1,1,1,1,2,2,2,25,0,3,30,2,23,2,35,19,2,5,2,2,16,2,2,5,30,2,2,65,2,2,5,0,4,2,0,34,2,2,4,51,2,2,3,17,1,3,2,3,13,3,2,27,2,2,2,3,2,43,2,2,2,1,2,30,2,0,2,5,2,21,2,2,2,36,18,2,2,2,3,30,0,2,1,2,25,5,21,2,46,1,15,5,2,2,1,5,0,50,0,2,2,5,2,1,15,1,1,1,1,1,7,1,70,1,1,15,3,5,2,5,15,2,5,2,2,2,22,5,0];
+
+const bArr=[0,-1,147,-1,214,-1,-1,-1,-1,345,-1,412,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,709,808,915,945,-1,1202,-1,1560,1850,-1,-1,-1,-1,2258,2388,-1,2435,2507,-1,-1,2723,-1,-1,2904,2942,2968,3028,3068,3144,3229,3290,3353,3528,3664,3700,3769,3799,3846,3887,3926,3955,4108,4217,4280,4332,4406,4463,4518,4546,4592,4607,4809,4852,4981,-1,-1,5129,-1,5242,-1,5288,5399,5463,5526,5549,5602,5758,5915,6051,6094,6139,6181,6251,6332,6374,-1,6514,6644,6768,6892,7029,7141,7297,7402,7487,-1,7632,7675,7713,7754,7785,7872,7900,7941,7984,8038,-1,8169,8232,-1,-1,-1,-1,8338,-1,8495,-1,-1,8661,8772,8816,-1,8884,8940,8999,9060,9105,9127,9161,9195,9288,9333];
+
+const bStp=[0,0,28,0,2,0,0,0,0,12,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,2,2,30,0,23,0,24,21,0,0,0,0,18,2,0,5,30,0,0,60,0,0,2,2,30,16,5,34,1,2,3,21,2,3,3,17,1,2,1,3,13,3,1,27,2,2,2,3,2,43,2,2,2,0,0,23,0,2,0,5,2,21,1,1,1,36,18,2,2,2,2,30,2,2,0,2,25,2,21,2,46,1,15,3,0,2,2,5,2,30,1,2,2,2,2,0,15,1,0,0,0,0,7,0,30,0,0,15,2,1,0,2,15,1,5,1,2,1,7,2,0];
+
+const routes=["AB","A","B","A","B","A","A","A","A","B","A","B","A","A","A","A","A","A","A","A","A","A","A","A","A","A","AB","B","AB","AB","A","AB","A","AB","AB","A","A","A","A","AB","AB","A","AB","AB","A","A","AB","A","A","AB","B","AB","AB","B","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","A","A","AB","A","B","A","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB","B","AB","A","AB","AB","AB","AB","AB","AB","AB","AB","AB","A","AB","AB","AB","B","AB","B","AB","AB","AB","AB","A","AB","AB","A","A","A","A","AB","A","AB","A","A","AB","AB","AB","A","AB","AB","AB","AB","AB","AB","AB","AB","AB","AB"];
+
+const tiers=[1,3,2,2,3,1,3,2,3,1,3,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,3,3,3,3,1,2,1,2,3,3,3,3,2,3,3,3,3,3,3,1,3,3,3,3,3,3,3,3,3,3,3,1,3,3,3,3,3,3,3,2,3,3,3,3,3,3,3,3,3,1,1,3,3,3,3,1,3,3,3,2,3,3,3,3,3,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,3,2,3,3,3,3,3,3,3,3,3,3,3,3,2,3,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1];
+
+// ── DESTINATION CARD DATA ─────────────────────────────────────────────────────
+// All source links verified June 2026. Wikipedia pages used for image loading.
+const CARDS=[
+  {i:[0],n:"Moscow",s:"Moskva Yaroslavskaya",t:1,r:"AB",
+   w:"The journey starts at Yaroslavsky station — one of nine terminals in Russia's extraordinary capital. The scale of the city's museums, monuments, and metro system is unlike anything else on the route.",
+   tags:["Culture","Architecture","History"],
+   top5:["Red Square &amp; St. Basil's Cathedral — the symbolic heart of Russia","The Kremlin — arms museum, Assumption Cathedral, Tsar Bell, Tsar Cannon","State Tretyakov Gallery — definitive collection of Russian art from medieval icons to the avant-garde","Moscow Metro — ride Komsomolskaya, Mayakovskaya, Novoslobodskaya as architectural landmarks","Bolshoi Theatre — ballet or opera; book well in advance"],
+   url:"https://en.wikivoyage.org/wiki/Moscow",lbl:"Wikivoyage — Moscow",wiki:"Moscow"},
+  {i:[5],n:"Yaroslavl",s:"Yaroslavl Passazhirskiy",t:1,r:"A",
+   w:"A UNESCO World Heritage city of extraordinary 17th-century churches on the Volga — one of Russia's most beautiful old towns, easily combined with Rostov Veliky 55km away.",
+   tags:["UNESCO","Architecture","History"],
+   top5:["Church of Elijah the Prophet — UNESCO-listed, with Russia's finest 17th-century frescoes","Spaso-Preobrazhensky Monastery — fortress-like complex with panoramic tower views","Volga River embankment walk — the city's living room, beautiful at sunset","Yaroslavl Museum-Reserve — history and art across multiple historic buildings","Combine with Rostov Veliky (55km) — kremlin, Lake Nero, Finift enamel workshops"],
+   url:"https://en.wikivoyage.org/wiki/Yaroslavl",lbl:"Wikivoyage — Yaroslavl",wiki:"Yaroslavl"},
+  {i:[9],n:"Nizhny Novgorod",s:"Nizhny Novgorod",t:1,r:"B",
+   w:"Russia's fifth-largest city commands a hilltop kremlin at the confluence of the Oka and Volga rivers, with a thriving contemporary arts scene that has made it one of the country's most talked-about destinations.",
+   tags:["Culture","History","Architecture"],
+   top5:["Nizhny Novgorod Kremlin — 16th-century hilltop fortress with sweeping river views","Strelka — walk to the tip where the Oka meets the Volga","Chkalov Staircase — 560 steps zigzagging to the river with panoramic views","Nizhny Novgorod Fair building — grand 19th-century trade hall, beautifully restored","Pokrovka Street pedestrian zone — cafés, art spaces, and street life"],
+   url:"https://en.wikivoyage.org/wiki/Nizhny_Novgorod",lbl:"Wikivoyage — Nizhny Novgorod",wiki:"Nizhny_Novgorod"},
+  {i:[2],n:"Vladimir",s:"Vladimir",t:2,r:"B",
+   w:"A compact UNESCO World Heritage city of 12th-century Orthodox masterpieces — three cathedrals in one town, and a 35km drive from the perfectly preserved medieval city of Suzdal.",
+   tags:["UNESCO","Architecture","Religion"],
+   top5:["Assumption Cathedral (UNESCO) — 12th century, with frescoes by Andrei Rublev","Golden Gate (UNESCO) — the city's medieval fortified entry point","Dmitrievsky Cathedral (UNESCO) — extraordinary carved stone facade","Day trip to Suzdal (35km) — monasteries, kremlin; arguably more beautiful than Vladimir itself","Day trip to Bogolyubovo (11km) — Church of the Intercession on the Nerl, a perfect 12th-century chapel in a meadow"],
+   url:"https://en.wikivoyage.org/wiki/Vladimir",lbl:"Wikivoyage — Vladimir",wiki:"Vladimir,_Russia"},
+  {i:[3],n:"Rostov Veliky",s:"Rostov Velikiy",t:2,r:"A",
+   w:"Rostov Veliky rewards those who stop — its 17th-century kremlin sits directly on the shore of Lake Nero and is one of Russia's most photogenic historic sites, often bypassed for larger Golden Ring cities.",
+   tags:["Architecture","History","Culture"],
+   top5:["Rostov Kremlin — 17th-century lakeside fortress; climb the towers for views over Lake Nero","Lake Nero boat trips — the ancient lake surrounds the city on three sides","Spaso-Yakovlevsky Monastery — twin-domed monastery on the lake shore","Finift enamel workshops — painted enamel art made only in Rostov; unique craft to take home","Combine with Yaroslavl (55km) — easy day trip or sequential stop"],
+   url:"https://en.wikivoyage.org/wiki/Rostov_Veliky",lbl:"Wikivoyage — Rostov Veliky",wiki:"Rostov_Veliky"},
+  {i:[7],n:"Kostroma",s:"Kostroma-Novaya",t:2,r:"A",
+   w:"Where the Romanov dynasty began in 1613 — the monastery where Michael Romanov was called to rule still stands, alongside Russia's best-preserved 18th-century market arcade.",
+   tags:["History","Architecture","Culture"],
+   top5:["Ipatievsky Monastery — where the Romanov dynasty began; gatehouse and cathedral intact","Historic Trade Rows — elegant 18th-century shopping arcade, now a working market","Romanov Museum — the dynasty's Kostroma story","Kostroma Linen Museum — linen has been the city's trade for centuries","Volga River embankment — pleasant waterfront with cafés and views"],
+   url:"https://en.wikivoyage.org/wiki/Kostroma",lbl:"Wikivoyage — Kostroma",wiki:"Kostroma"},
+  {i:[11],n:"Semenov",s:"Semenov",t:2,r:"B",
+   w:"A small town with one specific and fascinating draw: the heartland of Khokhloma — Russia's boldest folk art tradition in red, black, and gold lacquerwork, made here and watchable in the workshops.",
+   tags:["Craft","Culture","History"],
+   top5:["Golden Khokhloma factory — see the full process from woodturning to final lacquer","Regional Museum of Khokhloma Art — history and finest examples of the craft","Live workshop demonstrations — some workshops accept visitors for hands-on sessions","Local craft market — pick up authentic pieces directly from makers","Keriteza River walk — quiet riverside setting around the town"],
+   url:"https://en.wikipedia.org/wiki/Semyonov,_Nizhny_Novgorod_Oblast",lbl:"Wikipedia — Semenov",wiki:"Semyonov,_Nizhny_Novgorod_Oblast"},
+  {i:[26],n:"Kirov",s:"Kirov Passazhirskiy",t:2,r:"AB",
+   w:"One of Russia's oldest cities in this region — known as Vyatka for most of its history — with a quietly strong art museum and well-preserved merchant-era architecture at the gateway to the Urals.",
+   tags:["History","Architecture","Culture"],
+   top5:["Vyatka Art Museum — regional collection with genuinely strong holdings including Russian avant-garde","Kirov Diorama — large-scale panoramic battle painting in a purpose-built rotunda","Alexander Nevsky Cathedral — 19th-century cathedral on the central square","Historic merchant district — 18th and 19th century stone mansions along Moskovskaya Street","Spaso-Preobrazhensky Monastery — active monastery on a hill above the Vyatka River"],
+   url:"https://en.wikivoyage.org/wiki/Kirov",lbl:"Wikivoyage — Kirov",wiki:"Kirov,_Kirov_Oblast"},
+  {i:[31],n:"Perm",s:"Perm-2",t:1,r:"AB",
+   w:"A major Ural city that has reinvented itself culturally — and the base for Perm-36, one of the only surviving Soviet Gulag camps preserved as an open-air museum, telling a part of Russian history found nowhere else.",
+   tags:["Soviet History","Culture","Gulag History"],
+   top5:["Perm-36 Gulag Museum (~100km) — a preserved Soviet political prison camp; the most important site of its kind in Russia","Perm State Gallery — houses the extraordinary collection of medieval Perm Gods wooden sculpture","Khokhlovka Open-Air Architecture Museum (45km) — historic wooden buildings on a river bluff","PERMM Museum of Contemporary Art — strong programme of Russian and international contemporary work","Kama River embankment — wide Siberian river; boat trips available in summer"],
+   url:"https://en.wikivoyage.org/wiki/Perm",lbl:"Wikivoyage — Perm",wiki:"Perm,_Russia"},
+  {i:[32],n:"Kungur",s:"Kungur",t:2,r:"A",
+   w:"Famous for the Kungur Ice Cave — 5.7km of passages, underground lakes, and year-round ice formations — which sits just 5km from the station. <strong>Note: The Kungur Ice Cave is currently closed indefinitely.</strong>",
+   tags:["Adventure","Nature","Outdoors"],
+   top5:["Kungur Ice Cave — <strong>currently closed indefinitely</strong>; historically the town's main draw with 5.7km of passages, underground lakes, and year-round ice sculptures","Sylvensky Rapids — white-water rafting on the Sylva River in summer","Kungur Local History Museum — history of this old merchant town","Historic centre — well-preserved 18th–19th century merchant architecture","Easy combination with Perm (100km, ~1.5hr)"],
+   url:"https://en.wikipedia.org/wiki/Kungur_Ice_Cave",lbl:"Wikipedia — Kungur Ice Cave",wiki:"Kungur_Ice_Cave"},
+  {i:[33],n:"Yekaterinburg",s:"Ekaterinburg Passazhirskiy",t:1,r:"AB",
+   w:"Where the Romanov dynasty ended — Nicholas II and his family were executed here in 1918. Two powerful pilgrimage sites mark their story, and the city also sits on the Europe-Asia boundary.",
+   tags:["History","Architecture","Soviet History"],
+   top5:["Church on the Blood — built on the exact Romanov execution site; moving and architecturally striking","Ganina Yama Monastery — 7 chapels in forest where Romanov remains were discovered; a genuine pilgrimage","Europe-Asia border obelisk (~40km) — straddle the continental divide","Boris Yeltsin Presidential Centre — outstanding museum on the Soviet collapse and Russia's 1990s","Vysotsky Skyscraper observation deck — best panorama over the city"],
+   url:"https://en.wikivoyage.org/wiki/Yekaterinburg",lbl:"Wikivoyage — Yekaterinburg",wiki:"Yekaterinburg"},
+  {i:[34],n:"Tyumen",s:"Tyumen",t:2,r:"AB",
+   w:"The oldest Russian city in Siberia (founded 1586) — often rushed through, but its intricately carved wooden merchant architecture is among the finest in western Siberia and disappearing fast.",
+   tags:["History","Architecture","Culture"],
+   top5:["Historic wooden architecture — carved merchant mansions along Respubliki and Lenin Streets","Znamensky Cathedral — elegant 18th-century cathedral in the city centre","Tyumen Regional Museum — Siberian history from indigenous cultures to the oil boom","Siberian-Tatar Sloboda — historic neighbourhood of the city's Muslim Tatar community","Tobolsk day trip (250km, ~3hr) — Russia's only Siberian kremlin; a full day but very worthwhile"],
+   url:"https://en.wikivoyage.org/wiki/Tyumen",lbl:"Wikivoyage — Tyumen",wiki:"Tyumen"},
+  {i:[39],n:"Omsk",s:"Omsk",t:2,r:"AB",
+   w:"Where Dostoevsky spent four years in a prison camp — the experience shaped Crime and Punishment. The museum at his former prison is one of Russia's most powerful literary pilgrimage sites.",
+   tags:["Culture","History","Soviet History"],
+   top5:["Dostoevsky Museum — in the building of the prison where he was held 1850–54; extraordinary for anyone who has read his work","Assumption Cathedral — grand white cathedral anchoring the city centre","Omsk Regional Museum — strong natural history and Siberian ethnography collections","Omsk State Drama Theatre — one of Siberia's oldest theatres, in a beautiful classical building","Irtysh River embankment — wide Siberian river; boat trips in summer"],
+   url:"https://en.wikivoyage.org/wiki/Omsk",lbl:"Wikivoyage — Omsk",wiki:"Omsk"},
+  {i:[46],n:"Novosibirsk",s:"Novosibirsk-Glavnyy",t:1,r:"AB",
+   w:"Siberia's largest city and Russia's third-largest — home to the country's biggest opera house and Akademgorodok, a Soviet science city still buzzing with researchers, markets, and intellectual energy.",
+   tags:["Culture","Soviet History","Nature"],
+   top5:["Novosibirsk Opera House — the largest in Russia; opera and ballet at very reasonable prices","Akademgorodok (30km south) — Soviet science city; browse the open-air market, walk forest paths","Novosibirsk Zoo — one of Russia's best, with Siberian tigers, snow leopards, and 700+ species","Novosibirsk Regional Museum — comprehensive Siberian history including indigenous cultures","Ob Sea (Novosibirsk Reservoir) beach — large enough to feel like a real sea in summer"],
+   url:"https://en.wikivoyage.org/wiki/Novosibirsk",lbl:"Wikivoyage — Novosibirsk",wiki:"Novosibirsk"},
+  {i:[58],n:"Krasnoyarsk",s:"Krasnoyarsk Passazhirskiy",t:1,r:"AB",
+   w:"The Yenisei River city best known for Stolby Nature Reserve — volcanic rock pillars rising from taiga where local climbers have been free-climbing without ropes for over a century — and a museum so dramatic it appeared on the 10-ruble note.",
+   tags:["Nature","Adventure","Culture"],
+   top5:["Stolby Nature Reserve — volcanic rock pillars up to 100m, 45min from city; hiking for all levels, traditional free-climbing culture","Paraskeva Pyatnitsa Chapel — hilltop panorama printed on the 10-ruble note","Krasnoyarsk Regional Museum — Egyptian-revival building; strong Siberian indigenous cultures collections","Yenisei River boat trips — the great Siberian river; evening cruises popular in summer","Bobrovy Log gondola — runs year-round for views over the Yenisei valley"],
+   url:"https://en.wikivoyage.org/wiki/Krasnoyarsk",lbl:"Wikivoyage — Krasnoyarsk",wiki:"Krasnoyarsk"},
+  {i:[66],n:"Taishet",s:"Taishet",t:2,r:"AB",
+   w:"Not a destination in itself, but the junction where the Trans-Siberian meets the BAM Railway — the Baikal-Amur Mainline, a Soviet engineering megaproject through 4,000km of remote taiga, increasingly sought by adventure rail travelers.",
+   tags:["Rail History","Adventure","Soviet History"],
+   top5:["BAM Railway departure point — board the Baikal-Amur Mainline for one of the world's great rail adventures","Taishet Regional Museum — local history including the Gulag camps that built the BAM","Biryusa River — fishing and riverside walks in surrounding taiga","Soviet-era infrastructure — the town reflects the enormous scale of the BAM construction project","Gateway orientation — the junction point is the stop's main significance"],
+   url:"https://en.wikipedia.org/wiki/Baikal%E2%80%93Amur_Mainline",lbl:"Wikipedia — Baikal-Amur Mainline",wiki:"Baikal–Amur_Mainline"},
+  {i:[76,77],n:"Irkutsk",s:"Irkutsk Passazhirskiy",t:1,r:"AB",
+   w:"The undisputed highlight of most Trans-Siberian journeys — gateway to Lake Baikal, the world's deepest lake containing 20% of Earth's unfrozen fresh water, with a vibrant old city and excellent day-trip logistics.",
+   tags:["Nature","Culture","UNESCO"],
+   top5:["Listvyanka village on Lake Baikal (60km, 1hr) — swim, walk the shore, eat fresh omul, take the cable car","Olkhon Island (270km, 5hr) — dramatic shamanic landscapes, the most spectacular Baikal scenery","130 Kvartal — beautifully restored historic wooden district; Irkutsk's best restaurants and bars","Circumbaikal Railway (departs Port Baikal/Slyudyanka) — scenic cliff-hugging lake railway, one of the world's great rail journeys","Taltsy Architectural Museum (47km) — open-air collection of historic Siberian wooden structures"],
+   url:"https://en.wikivoyage.org/wiki/Irkutsk",lbl:"Wikivoyage — Irkutsk",wiki:"Irkutsk"},
+  {i:[82],n:"Ulan-Ude",s:"Ulan-Ude Passazhirskiy",t:1,r:"AB",
+   w:"The capital of Buryatia is where Russia meets Mongolia and Tibetan Buddhism — with the largest Buddhist monastery complex in Russia, a world-record Lenin head, and a cultural atmosphere unlike anywhere else on the route.",
+   tags:["Buddhism","Culture","History"],
+   top5:["Ivolginsky Datsan (40km) — the spiritual centre of Russian Buddhism; see the preserved body of Lama Itigilov","Giant Lenin Head — the world's largest Lenin bust, 7.7m tall in the central square","Rinpoche Bagsha Datsan — hilltop Buddhist temple with panoramic city and steppe views","Open-Air Ethnographic Museum — traditional Buryat and Cossack settlements, shamanic sites","Trans-Mongolian Railway junction — the route to Mongolia and Beijing branches here"],
+   url:"https://en.wikivoyage.org/wiki/Ulan_Ude",lbl:"Wikivoyage — Ulan-Ude",wiki:"Ulan-Ude"},
+  {i:[86],n:"Petrovsk-Zabaykalsky",s:"Petrovskiy Zavod",t:2,r:"AB",
+   w:"A historically significant Transbaikal town where Decembrist rebels were exiled to hard labor after their 1825 uprising. Their houses, a museum, and the iron factory ruins that defined their exile all survive.",
+   tags:["History","Decembrists","Culture"],
+   top5:["Decembrist Museum — in the original building where the exiles lived; letters, personal effects, and the story of their wives who followed voluntarily","Petrovsk Iron Factory ruins — the factory where Decembrists labored, partially standing","Decembrist wives' houses — preserved 19th-century homes of women who gave up aristocratic life","Local history museum — broader context on the Transbaikal region","Raw Siberian steppe and mountain landscape surrounding the town"],
+   url:"https://en.wikipedia.org/wiki/Petrovsk-Zabaykalsky_(town)",lbl:"Wikipedia — Petrovsk-Zabaykalsky",wiki:"Petrovsk-Zabaykalsky_(town)"},
+  {i:[92],n:"Chita",s:"Chita-2",t:2,r:"AB",
+   w:"The administrative capital of Transbaikalia, with a Decembrist connection — the oldest building in the city is the church where imprisoned nobles were allowed to worship — and a gateway to the vast Transbaikal wilderness.",
+   tags:["History","Decembrists","Nature"],
+   top5:["Decembrists' Church (Mikhail-Arkhangel) — oldest building in Chita, now a branch of the regional museum","Zabaykalsky Regional Museum — natural history and ethnography of the Transbaikal region","Tsogchin Dugan Buddhist temple — active temple serving the local Buryat community","Regional Art Museum — rotating exhibitions including Siberian and local artists","Sokhondinsky Nature Reserve (4hr south) — remote mountainous biosphere reserve"],
+   url:"https://en.wikivoyage.org/wiki/Chita",lbl:"Wikivoyage — Chita",wiki:"Chita,_Russia"},
+  {i:[114],n:"Svobodny",s:"Svobodnyy",t:2,r:"AB",
+   w:"An otherwise quiet Amur Region city that is now the gateway to Vostochny Cosmodrome — Russia's newest civilian space launch facility, built in the Amur taiga, which runs public tours.",
+   tags:["Space","Adventure","Soviet History"],
+   top5:["Vostochny Cosmodrome (100km north, ~1.5hr) — Russia's newest launch site; public tours available, launch viewing possible with advance planning via Roscosmos","Zeya River — fishing and boat trips on a major Amur tributary","Svobodny Local History Museum — regional history including the area's earlier role in Soviet rocket development","Amur River access — the great river forms the Russian-Chinese border nearby","Amur taiga surroundings — coniferous forest landscape stretching across the entire region"],
+   url:"https://www.roscosmos.ru/category/vostochny/",lbl:"Roscosmos — Vostochny Cosmodrome",wiki:"Vostochny_Cosmodrome"},
+  {i:[116],n:"Belogorsk / Blagoveshchensk",s:"Belogorsk",t:2,r:"AB",
+   w:"Belogorsk is the train stop; Blagoveshchensk (100km away) is the draw — a Russian border city facing China across the Amur, where you can watch the skyline of Heihe, and some visitors make an official day trip across.",
+   tags:["Border Crossing","Culture","History"],
+   top5:["Blagoveshchensk Amur embankment — stand on Russian soil and look directly across to China's skyline","Day trip to Heihe, China — official river crossing; check current border requirements before planning","Blagoveshchensk Regional Museum — history of the Amur region and Russia-China relations","Amur River boat tours — see the border from the water","Blagoveshchensk city centre — attractive tsarist-era architecture for a border city of this size"],
+   url:"https://en.wikivoyage.org/wiki/Blagoveshchensk",lbl:"Wikivoyage — Blagoveshchensk",wiki:"Blagoveshchensk"},
+  {i:[129],n:"Birobidzhan",s:"Birobidzhan",t:2,r:"AB",
+   w:"The capital of Russia's Jewish Autonomous Oblast — one of Stalin's stranger social experiments, established in the 1930s as a Soviet Jewish homeland in the Far East, with Yiddish street signs and an active Jewish community.",
+   tags:["Jewish History","Culture","Soviet History"],
+   top5:["Birobidzhan Synagogue — active community synagogue, centre of Jewish cultural life in the region","Bilingual street signs — walk the centre and spot Yiddish alongside Russian, a unique sight in Russia","Sholem Aleichem Cultural Centre — named after the Yiddish author; regular events","Friendship Square — central park with Soviet-era monuments","Birobidzhan Regional Museum — the full story of the JAO's founding and the waves of Jewish settlers who came"],
+   url:"https://en.wikivoyage.org/wiki/Birobidzhan",lbl:"Wikivoyage — Birobidzhan",wiki:"Birobidzhan"},
+  {i:[131],n:"Khabarovsk",s:"Khabarovsk-1",t:1,r:"AB",
+   w:"A handsome city on the Amur River — the embankment view is the one on Russia's 5,000-ruble note — with one of the country's best regional museums and a lively waterfront that belies its remote Far Eastern location.",
+   tags:["Culture","Nature","History"],
+   top5:["Amur River embankment — bring a 5,000-ruble note and find the exact viewpoint depicted on it","Khabarovsk Regional Museum — consistently rated one of Russia's finest regional museums","Sikachi-Alyan petroglyphs (75km, ~1.5hr) — 12,000-year-old rock carvings on the Amur River bank","Far Eastern Art Museum — strong Russian art collection including works rarely seen outside Moscow","Amur River boat trips — the scale of this river is remarkable"],
+   url:"https://en.wikivoyage.org/wiki/Khabarovsk",lbl:"Wikivoyage — Khabarovsk",wiki:"Khabarovsk"},
+  {i:[147],n:"Vladivostok",s:"Vladivostok",t:1,r:"AB",
+   w:"The end of the line — a dramatic Pacific port city on hills above a bay, with military heritage, the freshest seafood in Russia, ferry connections to Japan and South Korea, and an energy entirely unlike the rest of the journey.",
+   tags:["Culture","Adventure","History"],
+   top5:["Vladivostok Fortress Museum — extensive coastal fortifications; tunnels, gun batteries, panoramic positions","Russky Island &amp; Primorsky Oceanarium — connected by a spectacular cable-stayed bridge; beluga whales and Far Eastern marine life","S-56 Submarine Museum — walk through a real Soviet submarine moored on Golden Horn Bay","Eagle's Nest Hill viewpoint — best panorama over city, bay, and bridges","Ferry to Japan or South Korea — Sakaiminato or Donghae/Sokcho; turn the journey truly trans-continental"],
+   url:"https://en.wikivoyage.org/wiki/Vladivostok",lbl:"Wikivoyage — Vladivostok",wiki:"Vladivostok"}
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let selDep=-1,selArr=-1,selRoute='all',selTier=0;
+const ACT_BG='#FEFCE8',ACT_BD='#B8A800',ACT_COL='#3A2E00';
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function btnOn(el){el.style.setProperty('background',ACT_BG,'important');el.style.setProperty('border-color',ACT_BD,'important');el.style.setProperty('color',ACT_COL,'important');el.style.setProperty('font-weight','600','important');}
+function btnOff(el){el.style.removeProperty('background');el.style.removeProperty('border-color');el.style.removeProperty('color');el.style.removeProperty('font-weight');}
+function lm(dep,arr,tz){return dep+arr+(tz-3)*60;}
+function ft(m){let tot=((m%1440)+1440)%1440,d=Math.floor(m/1440)+1,h=Math.floor(tot/60),mn=tot%60;return{d,s:String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0')};}
+function fmsk(dep,arr){let tot=dep+arr,d=Math.floor(tot/1440)+1,r=tot%1440,h=Math.floor(r/60),mn=r%60;return'Day '+d+', '+String(h).padStart(2,'0')+':'+String(mn).padStart(2,'0');}
+function fd(m){if(m<0)return'—';let d=Math.floor(m/1440),h=Math.floor((m%1440)/60),mn=m%60;return(d?d+'d ':'')+h+'h'+(mn?' '+mn+'m':'');}
+function tierBadge(t){if(t===1)return'<span class="t1b">★★★</span>';if(t===2)return'<span class="t2b">★★</span>';return'';}
+function routeBadge(r){if(r==='AB')return'<div class="bab"><span class="ba">002Э</span><span class="bb">010H</span></div>';if(r==='A')return'<span class="ba">002Э</span>';return'<span class="bb">010H</span>';}
+function fmtCell(dep,arr,tz,stp){if(arr<0)return'<span class="na">—</span>';let t=ft(lm(dep,arr,tz));return'<span style="font-weight:500">Day '+t.d+'</span><br><span style="font-size:0.8125rem">'+t.s+'</span>'+(stp>0?' <span style="font-size:0.625rem;color:var(--color-text-secondary)">'+stp+'m</span>':'');}
+
+// ── FILTERS ───────────────────────────────────────────────────────────────────
+function showRow(i){
+  let rOk;
+  if(selRoute==='all')rOk=true;
+  else if(selRoute==='AB')rOk=routes[i]==='AB';
+  else if(selRoute==='A')rOk=routes[i]==='AB'||routes[i]==='A';
+  else rOk=routes[i]==='AB'||routes[i]==='B';
+  return rOk&&(selTier===0||(selTier===1&&tiers[i]===1)||(selTier===2&&tiers[i]<=2));
+}
+function showCard(c){
+  let rOk;
+  if(selRoute==='all')rOk=true;
+  else if(selRoute==='AB')rOk=c.r==='AB';
+  else if(selRoute==='A')rOk=c.r==='AB'||c.r==='A';
+  else rOk=c.r==='AB'||c.r==='B';
+  const tOk=selTier===0||selTier===2||(selTier===1&&c.t===1);
+  let dOk=true;
+  if(selDep>=0&&selArr>=0)dOk=c.i.some(idx=>idx>=selDep&&idx<=selArr);
+  return rOk&&tOk&&dOk;
+}
+
+// ── CONTROLS ──────────────────────────────────────────────────────────────────
+function setRoute(r){
+  selRoute=r;
+  ['all','AB','A','B'].forEach((v,k)=>{const el=document.getElementById('fr'+k);v===r?btnOn(el):btnOff(el);});
+  if(selDep>=0&&!showRow(selDep)){selDep=-1;selArr=-1;}
+  else if(selArr>=0&&!showRow(selArr)){selArr=-1;}
+  render();
+}
+function setTier(t){
+  selTier=t;
+  [0,1,2].forEach(k=>{const el=document.getElementById('ft'+k);k===t?btnOn(el):btnOff(el);});
+  if(selDep>=0&&!showRow(selDep)){selDep=-1;selArr=-1;}
+  else if(selArr>=0&&!showRow(selArr)){selArr=-1;}
+  render();
+}
+function cr(i){
+  if(selDep===i||selArr===i){selDep=-1;selArr=-1;}
+  else if(selDep===-1){selDep=i;}
+  else if(selArr===-1){if(i>selDep){selArr=i;}else{selArr=selDep;selDep=i;}}
+  else{selDep=i;selArr=-1;}
+  render();
+}
+function switchTab(tab){
+  document.getElementById('tab-tbl').classList.toggle('tab-act',tab==='tbl');
+  document.getElementById('tab-crd').classList.toggle('tab-act',tab==='crd');
+  document.getElementById('sec-tbl').classList.toggle('sec-hidden',tab!=='tbl');
+  document.getElementById('panel').classList.toggle('sec-hidden',tab!=='tbl');
+  document.getElementById('sec-crd').classList.toggle('sec-hidden',tab!=='crd');
+}
+
+// ── WIKIPEDIA IMAGE LOADER ────────────────────────────────────────────────────
+const imgObserver=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const img=e.target,wiki=img.dataset.wiki;
+      if(wiki){
+        fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(wiki))
+          .then(r=>r.json())
+          .then(d=>{if(d.thumbnail&&d.thumbnail.source){img.src=d.thumbnail.source;img.onload=()=>img.classList.add('loaded');}})
+          .catch(()=>{});
+      }
+      imgObserver.unobserve(img);
+    }
+  });
+},{rootMargin:'150px'});
+
+// ── CARD HTML ─────────────────────────────────────────────────────────────────
+function cardRouteHTML(r){
+  if(r==='AB')return'<div class="card-rbadge"><span class="ba">002Э</span><span class="bb">010H</span></div>';
+  if(r==='A')return'<div class="card-rbadge"><span class="ba">002Э</span></div>';
+  return'<div class="card-rbadge"><span class="bb">010H</span></div>';
+}
+function cardHTML(c){
+  const id=c.i[0];
+  const tb=c.t===1?'<span class="card-tier-badge ct1">★★★</span>':'<span class="card-tier-badge ct2">★★</span>';
+  const tags=c.tags.map(t=>`<span class="card-tag">${t}</span>`).join('');
+  const items=c.top5.map(a=>`<li>${a}</li>`).join('');
+  return`<div class="dest-card">
+    <div class="card-img-wrap">
+      <div class="card-img-placeholder">🗺️</div>
+      <img class="card-img" data-wiki="${c.wiki}" alt="${c.n}">
+      ${tb}${cardRouteHTML(c.r)}
+    </div>
+    <div class="card-body">
+      <div class="card-name">${c.n}</div>
+      <div class="card-station">${c.s}</div>
+      <div class="card-tags">${tags}</div>
+      <div class="card-why">${c.w}</div>
+      <div class="card-top5-section">
+        <div class="card-top5-hdr">Top 5 Sights and Activities</div>
+        <ol class="card-top5">${items}</ol>
+        <a href="${c.url}" target="_blank" rel="noopener" class="card-src">${c.lbl} →</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── SCROLL HEIGHT (15 rows) ───────────────────────────────────────────────────
+function setScrollHeight(){
+  const wrap=document.getElementById('tbl-wrap');
+  const rows=wrap.querySelectorAll('tbody tr');
+  if(rows.length<=15){wrap.style.maxHeight='none';return;}
+  const wrapTop=wrap.getBoundingClientRect().top;
+  wrap.style.maxHeight=(rows[14].getBoundingClientRect().bottom-wrapTop+1)+'px';
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(){
+  // — Table —
+  const tb=document.getElementById('tbl');
+  let rows='',vis=0;
+  for(let i=0;i<148;i++){
+    if(!showRow(i))continue;
+    vis++;
+    const isDep=i===selDep,isArr=i===selArr,isMid=selDep>=0&&selArr>=0&&i>selDep&&i<selArr;
+    const cls='row'+(isDep?' dep':isArr?' arr':isMid?' mid':'');
+    rows+=`<tr class="${cls}" onclick="cr(${i})"><td style="color:var(--color-text-secondary);font-size:0.625rem">${vis}</td><td>${routeBadge(routes[i])}</td><td><span class="sname">${names[i]}</span>${tierBadge(tiers[i])}${cities[i]?'<div class="scity">'+cities[i]+'</div>':''}</td><td style="text-align:right;color:var(--color-text-secondary);font-size:0.6875rem">${kms[i].toLocaleString()}</td><td>${fmtCell(DA,aArr[i],tzs[i],aStp[i])}</td><td>${fmtCell(DB,bArr[i],tzs[i],bStp[i])}</td></tr>`;
+  }
+  tb.innerHTML=rows;
+  setScrollHeight();
+  let hint='';
+  if(selDep<0)hint='Click a row to set departure · click another to set arrival';
+  else if(selArr<0)hint='<strong>'+names[selDep]+'</strong> set — click another row to set arrival';
+  document.getElementById('stbar').innerHTML=`<strong>${vis}</strong> of 148 stations${hint?' · '+hint:''}`;
+
+  // — Comparison panel —
+  const panel=document.getElementById('panel');
+  if(selDep<0||selArr<0){panel.style.display='none';}
+  else{
+    panel.style.display='block';
+    const di=selDep,ai=selArr;
+    function mkCard(badge,dep,arrD,stpD){
+      const ok=arrD[di]>=0&&arrD[ai]>=0;
+      if(!ok){const mis=arrD[di]<0?names[di]:names[ai];return`<div class="pcard"><div class="pcttl">${badge}</div><p class="pna">Does not stop at ${mis}</p></div>`;}
+      const dur=arrD[ai]-arrD[di]-stpD[di];
+      const dL=ft(lm(dep,arrD[di],tzs[di])),aL=ft(lm(dep,arrD[ai],tzs[ai]));
+      const dM=fmsk(dep,arrD[di]),aM=fmsk(dep,arrD[ai]);
+      const tzN=tzs[di]!==tzs[ai]?`<div style="font-size:0.625rem;color:var(--color-text-secondary);margin-top:2px">UTC+${tzs[di]} → UTC+${tzs[ai]}</div>`:'';
+      return`<div class="pcard"><div class="pcttl">${badge}</div><div class="pdur">${fd(dur)}</div><hr class="psep"><div class="pr"><span class="pk">Dep. ${names[di]}</span><span class="pv">Day ${dL.d}, ${dL.s} local<br><span class="pmsk">${dM} MSK</span></span></div><div class="pr"><span class="pk">Arr. ${names[ai]}</span><span class="pv">Day ${aL.d}, ${aL.s} local<br><span class="pmsk">${aM} MSK</span></span></div>${tzN}</div>`;
+    }
+    panel.innerHTML=`<div class="phdr"><div><div class="ptitle">${names[di]}${tierBadge(tiers[di])} → ${names[ai]}${tierBadge(tiers[ai])}</div><div style="font-size:0.6875rem;color:var(--color-text-secondary);margin-top:2px">${(kms[ai]-kms[di]).toLocaleString()} km · click any row to change selection</div></div><button class="pclr" onclick="selDep=-1;selArr=-1;render()">Clear</button></div><div class="pgrid">${mkCard('<span class="ba">002Э</span> Rossiya',DA,aArr,aStp)}${mkCard('<span class="bb">010H</span>',DB,bArr,bStp)}</div>`;
+  }
+
+  // — Cards —
+  const grid=document.getElementById('cards-grid');
+  const bar=document.getElementById('card-bar');
+  const vis2=CARDS.filter(showCard);
+  if(vis2.length===0){
+    grid.innerHTML='<div class="no-cards">No destinations match the current filters.</div>';
+    bar.textContent='0 of 25 destinations';
+    return;
+  }
+  grid.innerHTML=vis2.map(cardHTML).join('');
+  let cardNote=vis2.length+' of 25 destinations';
+  if(selDep>=0&&selArr>=0)cardNote+=' · between '+names[selDep]+' and '+names[selArr];
+  bar.textContent=cardNote;
+  grid.querySelectorAll('.card-img[data-wiki]').forEach(img=>imgObserver.observe(img));
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+btnOn(document.getElementById('ft0'));
+btnOn(document.getElementById('fr0'));
+render();
+</script>
+</body>
+</html>
