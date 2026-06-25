@@ -56,11 +56,13 @@ h1{font-size:1.125rem;font-weight:600;margin:0 0 2px;color:var(--color-text-prim
 .mc-time{font-size:0.75rem;margin-bottom:3px;display:flex;align-items:center;gap:6px}
 @media(max-width:640px){
   .dc{display:none}
-  .dc3{padding:8px 6px}
+  .dc3{padding:8px 6px;display:block;width:100%;box-sizing:border-box}
   .dc3>:not(.mc-block){display:none}
   .mc-block{display:block}
   thead{display:none}
-  #tbl-wrap{overflow-x:hidden}
+  #hdr{position:static}
+  .tab-bar{position:sticky;top:0;z-index:20;background:var(--color-background-primary)}
+  #tbl-wrap{max-height:none!important;overflow-y:visible!important;overflow-x:visible!important}
   table,tbody,tr{display:block}
   .sec-hdr{flex-direction:column;align-items:flex-start;gap:3px}
 }
