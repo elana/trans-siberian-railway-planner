@@ -51,11 +51,24 @@ h1{font-size:1.125rem;font-weight:600;margin:0 0 2px;color:var(--color-text-prim
 .tab-btn{flex:1;border:none;background:transparent;padding:11px;font-size:0.8125rem;cursor:pointer;color:var(--color-text-secondary);font-weight:500}
 .tab-btn.tab-act{background:var(--color-background-secondary);color:var(--color-text-primary)}
 @media(max-width:640px){.tab-bar{display:flex}.sec-hidden{display:none!important}}
+.mc-block{display:none}
+.mc-name{font-size:0.75rem;font-weight:500;margin-bottom:5px;color:var(--color-text-primary)}
+.mc-time{font-size:0.75rem;margin-bottom:3px;display:flex;align-items:center;gap:6px}
+@media(max-width:640px){
+  .dc{display:none}
+  .dc3{padding:8px 6px}
+  .dc3>:not(.mc-block){display:none}
+  .mc-block{display:block}
+  thead{display:none}
+  #tbl-wrap{overflow-x:hidden}
+  table,tbody,tr{display:block}
+  .sec-hdr{flex-direction:column;align-items:flex-start;gap:3px}
+}
 .sec-hdr{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 8px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
 .sec-title{font-size:0.8125rem;font-weight:600;color:var(--color-text-primary);margin:0}
 .sec-count{font-size:0.6875rem;color:var(--color-text-secondary)}
 #stbar{font-size:0.6875rem;color:var(--color-text-secondary);padding:4px 0 6px}
-#tbl-wrap{overflow-y:auto;overflow-x:auto;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)}
+#tbl-wrap{overflow-y:auto;overflow-x:auto;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);max-height:calc(100dvh - var(--tbl-top,200px) - 90px)}
 table{width:100%;border-collapse:collapse;table-layout:fixed}
 th{font-size:0.625rem;font-weight:500;color:var(--color-text-secondary);text-align:left;padding:7px 5px;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap;position:sticky;top:0;background:var(--color-background-primary);z-index:2}
 td{font-size:0.75rem;padding:6px 5px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
@@ -462,13 +475,24 @@ function cardHTML(c){
   </div>`;
 }
 
-// ── SCROLL HEIGHT (15 rows) ───────────────────────────────────────────────────
-function setScrollHeight(){
+// ── TABLE HEIGHT (viewport-based via CSS custom property) ─────────────────────
+function setTableHeight(){
   const wrap=document.getElementById('tbl-wrap');
-  const rows=wrap.querySelectorAll('tbody tr');
-  if(rows.length<=15){wrap.style.maxHeight='none';return;}
-  const wrapTop=wrap.getBoundingClientRect().top;
-  wrap.style.maxHeight=(rows[14].getBoundingClientRect().bottom-wrapTop+1)+'px';
+  if(!wrap)return;
+  const top=wrap.getBoundingClientRect().top+window.pageYOffset;
+  document.documentElement.style.setProperty('--tbl-top',top+'px');
+}
+
+// ── MOBILE ROW ────────────────────────────────────────────────────────────────
+function fmtMT(dep,arr,tz,stp){
+  if(arr<0)return null;
+  const t=ft(lm(dep,arr,tz));
+  return 'Day '+t.d+' '+t.s+(stp>0?' <span style="font-size:0.625rem;color:var(--color-text-secondary)">'+stp+'m</span>':'');
+}
+function mobileRow(i){
+  const a=fmtMT(DA,aArr[i],tzs[i],aStp[i]);
+  const b=fmtMT(DB,bArr[i],tzs[i],bStp[i]);
+  return '<div class="mc-block"><div class="mc-name"><span class="sname">'+names[i]+'</span>'+tierBadge(tiers[i])+'</div>'+(a?'<div class="mc-time"><span class="ba">002Э</span>'+a+'</div>':'')+(b?'<div class="mc-time"><span class="bb">010H</span>'+b+'</div>':'')+'</div>';
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
@@ -481,10 +505,9 @@ function render(){
     vis++;
     const isDep=i===selDep,isArr=i===selArr,isMid=selDep>=0&&selArr>=0&&i>selDep&&i<selArr;
     const cls='row'+(isDep?' dep':isArr?' arr':isMid?' mid':'');
-    rows+=`<tr class="${cls}" onclick="cr(${i})"><td style="color:var(--color-text-secondary);font-size:0.625rem">${vis}</td><td>${routeBadge(routes[i])}</td><td><span class="sname">${names[i]}</span>${tierBadge(tiers[i])}${cities[i]?'<div class="scity">'+cities[i]+'</div>':''}</td><td style="text-align:right;color:var(--color-text-secondary);font-size:0.6875rem">${kms[i].toLocaleString()}</td><td>${fmtCell(DA,aArr[i],tzs[i],aStp[i])}</td><td>${fmtCell(DB,bArr[i],tzs[i],bStp[i])}</td></tr>`;
+    rows+=`<tr class="${cls}" onclick="cr(${i})"><td class="dc" style="color:var(--color-text-secondary);font-size:0.625rem">${vis}</td><td class="dc">${routeBadge(routes[i])}</td><td class="dc3"><span class="sname">${names[i]}</span>${tierBadge(tiers[i])}${cities[i]?'<div class="scity">'+cities[i]+'</div>':''}${mobileRow(i)}</td><td class="dc" style="text-align:right;color:var(--color-text-secondary);font-size:0.6875rem">${kms[i].toLocaleString()}</td><td class="dc">${fmtCell(DA,aArr[i],tzs[i],aStp[i])}</td><td class="dc">${fmtCell(DB,bArr[i],tzs[i],bStp[i])}</td></tr>`;
   }
   tb.innerHTML=rows;
-  setScrollHeight();
   let hint='';
   if(selDep<0)hint='Click a row to set departure · click another to set arrival';
   else if(selArr<0)hint='<strong>'+names[selDep]+'</strong> set — click another row to set arrival';
@@ -528,6 +551,8 @@ function render(){
 btnOn(document.getElementById('ft0'));
 btnOn(document.getElementById('fr0'));
 render();
+setTableHeight();
+window.addEventListener('resize',()=>{clearTimeout(window._rst);window._rst=setTimeout(setTableHeight,100);});
 </script>
 </body>
 </html>
